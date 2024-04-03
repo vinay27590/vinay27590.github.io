@@ -7,7 +7,6 @@ import { title, subtitle } from "@/components/primitives";
 import { DownloadIcon, GithubIcon } from "@/components/icons";
 import LandingPage from "@/components/customComponents/landingPage";
 import { landingPageConfig } from "@/config/landingPageConfig";
-import Project from "@/components/customComponents/Project";
 
 export default function Home() {
   return (
@@ -17,7 +16,6 @@ export default function Home() {
         description={landingPageConfig.description}
         buttonLable={landingPageConfig.buttonLable}
       />
-      <Project />
     </div>
   );
 }

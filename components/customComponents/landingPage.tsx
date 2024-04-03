@@ -42,7 +42,7 @@ export default function LandingPage(props: LandingPageProps) {
                   inline: true,
                 })}
               >
-                I'm&nbsp;
+                I &apos;m &nbsp;
               </h1>
               <h1
                 className={title({
@@ -55,7 +55,7 @@ export default function LandingPage(props: LandingPageProps) {
               </h1>
               <br />
               <h1 className={title({ class: "dark:text-white" })}>
-                I'm a Full-Stack Developer
+                I&apos;m a Full-Stack Developer
               </h1>
             </div>
             <div className="flex gap-3 mt-10">
