@@ -27,8 +27,9 @@ export default function Project() {
       >
         I love Learning new Technologies and building projects to gain practical
         expertise. My projects makes use of vast variety of latest technology
-        tools, Like Java, Angular, React.js, Vue.js, Spring Boot. Here's a few
-        of the projects I've worked on. You can see the full list on my 
+        tools, Like Java, Angular, React.js, Vue.js, Spring Boot. Here&apos;s a
+        few of the projects I&apos;ve worked on. You can see the full list on
+        my 
         <Link
           underline="hover"
           size="lg"
