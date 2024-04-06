@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import ProjectItem, { ProjectItemModel } from "./ProjectItem2";
 import { Spacer } from "@nextui-org/react";
 import { projects } from "@/config/dummyData";
-import { BackgroundBeams } from "../ui/background-beams";
 
 export default function Project() {
   return (
