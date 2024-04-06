@@ -27,37 +27,25 @@ export const siteConfig = {
 	],
 	navMenuItems: [
 		{
-			label: "Profile",
-			href: "/#",
-		},
-		{
-			label: "Dashboard",
-			href: "/#",
+			label: "Home",
+			href: "/",
 		},
 		{
 			label: "Projects",
 			href: "/#",
 		},
+		// {
+		//   label: "Experience",
+		//   href: "/pricing",
+		// },
 		{
-			label: "Team",
+			label: "About",
 			href: "/#",
 		},
 		{
-			label: "Calendar",
+			label: "Contact me",
 			href: "/#",
-		},
-		{
-			label: "Settings",
-			href: "/#",
-		},
-		{
-			label: "Help & Feedback",
-			href: "/#",
-		},
-		{
-			label: "Logout",
-			href: "/#",
-		},
+		}
 	],
 	links: {
 		github: "https://github.com/vinay27590",
