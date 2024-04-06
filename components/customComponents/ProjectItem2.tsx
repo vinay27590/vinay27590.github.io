@@ -5,7 +5,11 @@ import {
   CardFooter,
   Image,
   Button,
+  Spacer,
 } from "@nextui-org/react";
+import { title } from "../primitives";
+import { BackgroundGradient } from "../ui/background-gradient";
+import { ImageSlider } from "./ImageSlider";
 
 export interface ProjectItemModel {
   projectName: string;
@@ -20,44 +24,49 @@ interface ProjectItemProps {
   project: ProjectItemModel;
 }
 
-export default function ProjectItem() {
+export default function ProjectItem(props: ProjectItemProps) {
   return (
-    <div className="lg:w-72">
-      <Card
-        isFooterBlurred
-        className="w-full h-[300px] col-span-12 sm:col-span-7"
-      >
-        <CardHeader className="absolute z-10 top-1 flex-col items-start">
-          <p className="text-tiny text-white/60 uppercase font-bold">
-            Project title
-          </p>
-          <h4 className="text-white/90 font-medium text-xl">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque
-            corporis sapiente labore.
-          </h4>
-        </CardHeader>
-        <Image
-          removeWrapper
-          alt="Relaxing app background"
-          className="z-0 w-full h-full object-cover"
-          src="/images/card-example-5.jpeg"
-        />
-        <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
-          <div className="flex flex-grow gap-2 items-center">
-            <Image
-              alt="Breathing app icon"
-              className="rounded-full w-10 h-11 bg-black"
-              src="/images/breathing-app-icon.jpeg"
-            />
-            <div className="flex flex-col">
-              <p className="text-tiny text-white/60">Breathing App</p>
+    <BackgroundGradient className="rounded-[25px] p-unit sm:p-unit bg-white dark:bg-zinc-900 dark:text-white/80 light:text-black/10">
+      <div className="flex lg:max-h-[400px] items-center justify-between">
+        <div className="flex flex-col basis-1/2 p-5 space-y-8">
+          <div>
+            <p
+              className={title({
+                size: "cardTitle",
+                color: "violet",
+                class: " p-2 text-center",
+              })}
+            >
+              {props.project.projectName}
+            </p>
+            <h4 className="dark:text-white/90 text-sm">
+              {props.project.purpose}
+            </h4>
+          </div>
+          <div className="">
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col space-y-2 ">
+                <p className="text-tiny">Tech-Used</p>
+                <div className="flex space-x-3">
+                  {props.project.techUsed.map((tech) => (
+                    <div key={tech} className="">
+                      <p className="text-tiny ">{tech}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Button radius="full" size="sm">
+                Know More
+              </Button>
             </div>
           </div>
-          <Button radius="full" size="sm">
-            Get App
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
+        </div>
+
+        <div className="">
+          <ImageSlider />
+        </div>
+      </div>
+    </BackgroundGradient>
   );
 }
