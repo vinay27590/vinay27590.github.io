@@ -30,7 +30,7 @@ export default function Experience() {
         >
           I have Multiple work Experiences from different fields like Sales,
           Marketing, Tech-Support, Here i have worked for several years and
-          learned a lot of different great things and now I'am working as a
+          learned a lot of different great things and now I&apos;am working as a
           Associate Software Developer. Here are some Experience.
           <p className="text-sm text-yellow-300">
             (Note: I am not sharing my Non-Developer Experiences because it is
