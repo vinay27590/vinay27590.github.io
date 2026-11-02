@@ -483,7 +483,7 @@ export const timetable: Job[] = [
 
 export const education = [
   {
-    title: "Bachelor of Engineering, Information Technology (not completed)",
+    title: "Bachelor of Engineering, Information Technology (Dropped out)",
     place: "Shri Vaishnav Institute of Technology and Science, Indore",
   },
   { title: "Higher Secondary (PCM)", place: "Talent Higher Secondary School, Indore" },

@@ -159,7 +159,7 @@ export default function HomePage() {
                             className="inline-flex min-h-11 items-center underline decoration-[3px] underline-offset-[6px]"
                             style={{ textDecorationColor: l.color }}
                           >
-                            {l.name} line
+                            {l.name}
                           </a>
                         ))}
                       </p>
@@ -195,11 +195,11 @@ export default function HomePage() {
                 width={900}
                 height={1200}
                 loading="lazy"
-                alt="Vinay Chouhan standing beside the Runfinity 2.0 marathon sign, wearing a medal"
+                alt="Vinay Chouhan standing beside the Runfinity 2.0 marathon sign at IIM Indore"
                 className="w-full h-auto rounded-[4px]"
               />
               <figcaption className="mt-3 text-sm font-semibold text-ink/70">
-                At the Runfinity 2.0 marathon, medal around my neck.
+                At the Runfinity 2.0 marathon, IIM Indore.
               </figcaption>
             </figure>
 
