@@ -2,39 +2,149 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Signage tokens. Ink is the text colour and paper the ground, so they swap
+ * in dark mode; enamel is the always-dark sign plate (nav, timetable board).
+ * Line colours keep one meaning each and lift slightly on the dark ground.
+ */
 :root {
+  color-scheme: light;
+  --ink: 21 23 28;
+  --paper: 255 255 255;
+  --platform: 241 241 238;
+  --enamel: 21 23 28;
+  --on-enamel: 255 255 255;
+  --l-laundryos: #0a6fb8;
+  --l-flexpulse: #d8262f;
+  --l-mihaan: #009a5b;
+  --l-direction: #f2a900;
+  --l-rockfort: #8b8f94;
+}
+
+.dark {
   color-scheme: dark;
+  --ink: 236 234 228;
+  --paper: 14 16 19;
+  --platform: 27 30 35;
+  --enamel: 6 7 9;
+  --on-enamel: 246 245 241;
+  --l-laundryos: #3d9be0;
+  --l-flexpulse: #f0525a;
+  --l-mihaan: #1fb877;
+  --l-direction: #f5b82e;
+  --l-rockfort: #9a9ea4;
+}
+
+html {
+  scroll-padding-top: 3.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
-  @apply bg-bg text-slate-100 min-h-screen;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  @apply bg-paper text-ink min-h-screen antialiased;
+  font-family: var(--font-overpass), system-ui, sans-serif;
+  font-variant-numeric: lining-nums;
+  caret-color: rgb(var(--ink));
+  scrollbar-color: rgb(var(--ink)) rgb(var(--platform));
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-main {
-  @apply max-w-5xl mx-auto px-4 sm:px-6;
+::selection {
+  background: rgb(var(--ink));
+  color: rgb(var(--paper));
 }
 
-.section {
-  @apply py-16 sm:py-20;
+:focus-visible {
+  outline: 3px solid rgb(var(--ink));
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-.section-title {
-  @apply text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent;
+.dark header,
+.dark .on-enamel {
+  box-shadow: inset 0 0 0 1px rgb(var(--on-enamel) / 0.1);
 }
 
-.card {
-  @apply rounded-2xl bg-bg-soft/80 border border-slate-800/80 shadow-xl shadow-slate-900/50 backdrop-blur;
+.on-enamel :focus-visible,
+header :focus-visible {
+  outline-color: rgb(var(--on-enamel));
 }
 
+/* Network map */
+.map-line {
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.map-line:focus-visible {
+  outline: none;
+}
+
+.map-line:focus-visible text {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .map-reveal {
+    animation: map-reveal 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+  .map-reveal-down {
+    animation: map-reveal-down 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+}
+
+@keyframes map-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes map-reveal-down {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Nav */
 .nav-link {
-  display: block;
-  padding: 6px 0;
-  transition: color 0.2s ease, transform 0.2s ease;
+  position: relative;
+  padding: 4px 0;
+  color: rgb(var(--on-enamel) / 0.78);
+  transition: color 0.2s ease;
 }
 
-.nav-link:hover {
-  color: #38bdf8;  /* sky-400 */
-  transform: translateX(2px);
+.nav-link:hover,
+.nav-link.is-active {
+  color: rgb(var(--on-enamel));
 }
 
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgb(var(--on-enamel));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover::after,
+.nav-link.is-active::after {
+  transform: scaleX(1);
+}

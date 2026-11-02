@@ -1,93 +1,106 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { FiMenu, FiX } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { FiDownload, FiMenu, FiX } from "react-icons/fi";
+import { RESUME_URL } from "./data";
+import { ThemeToggle } from "./ThemeToggle";
+
+const navLinks = [
+  { label: "Projects", id: "projects" },
+  { label: "Experience", id: "experience" },
+  { label: "Skills", id: "skills" },
+  { label: "About", id: "about" },
+  { label: "Contact", id: "contact" },
+];
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [active, setActive] = useState("home");
+  const [active, setActive] = useState<string | null>(null);
 
-  // Close menu on route/scroll
   useEffect(() => {
-    const handler = () => setMenuOpen(false);
-    window.addEventListener("scroll", handler);
-    return () => window.removeEventListener("scroll", handler);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    ["hero", ...navLinks.map((l) => l.id)].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
   }, []);
 
-  // Smooth scrolling
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const offset = 80; // navbar height
-      const top = el.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-    setActive(id);
-    setMenuOpen(false);
-  };
-
-  const navLinks = [
-    { label: "Home", id: "hero" },
-    { label: "About", id: "about" },
-    { label: "Skills", id: "skills" },
-    { label: "Experience", id: "experience" },
-    { label: "Projects", id: "projects" },
-    { label: "Contact", id: "contact" },
-  ];
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-bg/80 backdrop-blur-lg border-b border-slate-800">
-      <nav className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+    <header className="fixed top-0 inset-x-0 z-50 bg-enamel text-on-enamel">
+      <nav className="mx-auto max-w-[1280px] h-14 px-5 sm:px-8 lg:px-10 flex items-center gap-2 lg:gap-8" aria-label="Main">
+        <a href="#hero" className="flex items-center gap-3 font-extrabold text-[1.05rem] tracking-[-0.01em] whitespace-nowrap min-h-11">
+          <span
+            aria-hidden="true"
+            className="size-5 rounded-full bg-on-enamel"
+            style={{ boxShadow: "inset 0 0 0 4px rgb(var(--enamel)), 0 0 0 2px rgb(var(--on-enamel))" }}
+          />
+          Vinay Chouhan
+        </a>
 
-        {/* LOGO */}
-        <Link
-          href="#hero"
-          onClick={() => scrollToSection("hero")}
-          className="text-xl sm:text-2xl font-bold text-sky-400"
-        >
-          VINAY CHOUHAN
-        </Link>
-
-        {/* DESKTOP MENU */}
-        <ul className="hidden sm:flex items-center gap-8 text-slate-300">
+        <ul className="hidden lg:flex items-center gap-7 ml-auto text-[0.95rem] font-semibold">
           {navLinks.map((link) => (
             <li key={link.id}>
-              <button
-                onClick={() => scrollToSection(link.id)}
-                className={`nav-link ${
-                  active === link.id ? "text-sky-400 font-semibold" : ""
-                }`}
+              <a
+                href={`#${link.id}`}
+                aria-current={active === link.id ? "true" : undefined}
+                className={`nav-link ${active === link.id ? "is-active" : ""}`}
               >
                 {link.label}
-              </button>
+              </a>
             </li>
           ))}
         </ul>
 
-        {/* MOBILE MENU BUTTON */}
-        <button
-          className="sm:hidden text-sky-400 text-3xl"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <FiX /> : <FiMenu />}
-        </button>
+        <div className="ml-auto lg:ml-0 flex items-center gap-1 lg:gap-3">
+          <ThemeToggle />
+          <a
+            href={RESUME_URL}
+            download
+            aria-label="Download resume"
+            className="inline-flex items-center justify-center gap-2 rounded-[3px] bg-on-enamel text-enamel h-11 lg:h-9 min-w-11 px-3 lg:px-4 text-sm font-extrabold hover:opacity-85 transition-opacity"
+          >
+            <FiDownload aria-hidden="true" />
+            <span className="hidden sm:inline">Resume</span>
+          </a>
+          <button
+            className="lg:hidden -mr-2 grid place-items-center size-11 text-2xl"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <FiX /> : <FiMenu />}
+          </button>
+        </div>
       </nav>
 
-      {/* MOBILE DROPDOWN MENU */}
       {menuOpen && (
-        <div className="sm:hidden bg-bg/95 backdrop-blur-lg border-t border-slate-700 py-4 px-6">
-          <ul className="flex flex-col gap-6 text-lg text-slate-200">
+        <div id="mobile-menu" className="lg:hidden border-t border-on-enamel/15 px-5 sm:px-8 pb-6 pt-2">
+          <ul className="flex flex-col text-lg font-semibold">
             {navLinks.map((link) => (
               <li key={link.id}>
-                <button
-                  onClick={() => scrollToSection(link.id)}
-                  className={`w-full text-left ${
-                    active === link.id ? "text-sky-400 font-semibold" : ""
-                  }`}
+                <a
+                  href={`#${link.id}`}
+                  onClick={() => setMenuOpen(false)}
+                  className={`block py-3 border-b border-on-enamel/10 ${active === link.id ? "font-extrabold" : "text-on-enamel/80"}`}
                 >
                   {link.label}
-                </button>
+                </a>
               </li>
             ))}
           </ul>

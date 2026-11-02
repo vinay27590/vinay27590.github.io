@@ -1,279 +1,321 @@
-"use client";
+import { FiArrowUp, FiArrowUpRight, FiCode, FiDownload, FiGithub, FiLinkedin, FiMail, FiMapPin, FiPhone } from "react-icons/fi";
+import { Section, container } from "@/components/Section";
+import { LineFocusProvider } from "@/components/LineFocus";
+import { LineIndex, NetworkMap, Track } from "@/components/NetworkMap";
+import { LineSection } from "@/components/LineSection";
+import { SkillIndex } from "@/components/SkillIndex";
+import { Dotted } from "@/components/Dotted";
+import {
+  RESUME_URL,
+  certifications,
+  contact,
+  education,
+  lineById,
+  lines,
+  profile,
+  timetable,
+} from "@/components/data";
 
-import { motion } from "framer-motion";
-import { Section } from "@/components/Section";
-import { skills } from "@/components/data";
+function Actions({ className = "", email = true }: { className?: string; email?: boolean }) {
+  return (
+    <div className={`flex flex-wrap gap-3 ${className}`}>
+      <a
+        href={RESUME_URL}
+        download
+        className="inline-flex items-center justify-center gap-2.5 rounded-[4px] bg-ink text-paper px-5 sm:px-6 py-3 sm:py-3.5 text-base sm:text-lg font-extrabold hover:opacity-85 transition-opacity"
+      >
+        <FiDownload aria-hidden="true" /> Download resume
+      </a>
+      {email && (
+        <a
+          href={`mailto:${contact.email}`}
+          className="inline-flex items-center justify-center gap-2.5 rounded-[4px] px-5 sm:px-6 py-3 sm:py-3.5 text-base sm:text-lg font-extrabold shadow-[inset_0_0_0_3px_rgb(var(--ink))] hover:bg-platform transition-colors"
+        >
+          <FiMail aria-hidden="true" /> Email me
+        </a>
+      )}
+    </div>
+  );
+}
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0 },
-};
+function Legend() {
+  return (
+    <p className="text-sm font-semibold text-ink/70 flex flex-wrap items-center gap-x-6 gap-y-2">
+      <span className="inline-flex items-center gap-2">
+        <Track color="rgb(var(--ink))" hollow={false} className="!w-8" /> Shipped
+      </span>
+      <span className="inline-flex items-center gap-2">
+        <Track color="rgb(var(--ink))" hollow className="!w-8" /> Under construction
+      </span>
+      <span>Select a line to ride it.</span>
+    </p>
+  );
+}
 
 export default function HomePage() {
   return (
-    <main>
-      {/* ========================================================= */}
-      {/* 1. HERO SECTION */}
-      {/* ========================================================= */}
-      <section id="hero" className="pt-32 pb-16 sm:pt-40 sm:pb-24">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center sm:items-start gap-10">
-          {/* TEXT */}
-          <div className="flex-1 text-center sm:text-left">
-            <p className="inline-flex items-center rounded-full border border-slate-700 bg-bg-soft/70 px-4 py-1 text-sm sm:text-base text-slate-300">
-              Java Full-Stack Developer · 4 Years · Immediate Joiner
-            </p>
+    <LineFocusProvider>
+      <main>
+        {/* ── Hero: the station sign and the network ── */}
+        <section id="hero" className={`${container} pt-20 sm:pt-24`}>
+          <h1 className="text-[clamp(2.75rem,7vw,4.75rem)] font-black tracking-[-0.045em] leading-[0.88]">
+            {profile.name}
+          </h1>
 
-            <h1 className="mt-5 text-4xl sm:text-6xl font-extrabold leading-tight flex flex-wrap justify-center sm:justify-start gap-3">
-              Hi, I&apos;m <span className="text-sky-400">Vinay Chouhan</span>
-              <span className="wave text-5xl">👋</span>
-            </h1>
+          <div className="mt-6 grid gap-x-10 gap-y-10 md:grid-cols-2 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <p className="text-2xl sm:text-[1.75rem] font-extrabold tracking-[-0.02em] leading-tight">{profile.role}</p>
+              <p className="mt-1 text-lg font-semibold text-ink/75">
+                <Dotted items={profile.stack} />
+              </p>
+              <p className="mt-5 max-w-[64ch] text-lg leading-relaxed text-ink/85 text-pretty">{profile.summary}</p>
+              <Actions className="mt-7 xl:hidden" />
+              <p className="mt-4 flex items-center gap-2 text-sm font-semibold text-ink/70 xl:hidden">
+                <FiMapPin aria-hidden="true" /> {profile.location}
+              </p>
+            </div>
 
-            <p className="mt-6 text-lg text-slate-300 max-w-xl mx-auto sm:mx-0">
-              I build scalable backend systems using{" "}
-              <span className="text-sky-400">Java</span>,
-              <span className="text-sky-400"> Spring Boot</span>,
-              <span className="text-sky-400"> Spring WebFlux</span>, and
-              PostgreSQL — with a strong focus on automation, performance,
-              and clean architecture.
-            </p>
+            {/* Wide screens: actions beside the summary, aligned to the role line */}
+            <div className="hidden xl:flex lg:col-span-5 flex-col items-end gap-4">
+              <Actions className="flex-col w-[17rem] [&>a]:w-full" />
+              <p className="w-[17rem] flex items-center justify-center gap-2 text-sm font-semibold text-ink/70">
+                <FiMapPin aria-hidden="true" /> {profile.location}
+              </p>
+            </div>
 
-            <div className="mt-8 flex flex-wrap justify-center sm:justify-start gap-4">
-              <a
-                href="#projects"
-                className="rounded-full bg-sky-500 hover:bg-sky-400 px-6 py-3 text-black font-medium shadow-lg"
-              >
-                View Projects
-              </a>
+            {/* Narrow and mid screens: the vertical diagram */}
+            <div className="xl:hidden lg:col-span-5">
+              <div className="max-w-[400px] md:ml-auto">
+                <LineIndex />
+              </div>
+            </div>
+          </div>
 
-              <a
-                href="#contact"
-                className="rounded-full border border-slate-500 px-6 py-3 font-medium"
-              >
-                Contact Me
-              </a>
+          <div className="hidden xl:block mt-6">
+            <NetworkMap />
+          </div>
+          <div className="mt-6 xl:mt-4">
+            <Legend />
+          </div>
+        </section>
 
-              <a
-                href="/resume/VINAY CV.pdf"
-                download
-                className="group rounded-full px-6 py-3 text-sm font-semibold transition
-                bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950
-                shadow-lg shadow-emerald-500/30 hover:shadow-emerald-400/40
-                hover:scale-[1.03]"
-              >
-                <span className="inline-flex items-center gap-2">
-                  <svg
-                    className="w-4 h-4 group-hover:animate-pulse"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"
+        {/* ── Projects ── */}
+        <Section
+          id="projects"
+          title="Projects"
+          intro="Two products I'm building end to end, and the enterprise systems behind them. Select a station to see what was built there."
+        >
+          {lines.map((line, i) => (
+            <LineSection key={line.id} line={line} first={i === 0} />
+          ))}
+        </Section>
+
+        {/* ── Experience: the timetable board ── */}
+        <Section
+          id="experience"
+          tone="enamel"
+          title="Experience"
+          intro="From a support desk in 2019 to leading a team of three at Mihaan, and now my own two products."
+        >
+          <ol className="mt-12">
+            {timetable.map((job, i) => {
+              const last = i === timetable.length - 1;
+              const routeLines = job.lines?.map((id) => lineById[id]) ?? [];
+              return (
+                <li key={job.company} className="grid grid-cols-[2.5rem_1fr] md:grid-cols-[3rem_14rem_1fr] gap-x-4 md:gap-x-6">
+                  <div className="relative row-span-2 md:row-span-1" aria-hidden="true">
+                    <div className={`absolute left-1/2 -translate-x-1/2 top-3 ${last ? "h-12" : "bottom-0"} flex gap-1`}>
+                      {routeLines.length > 0 ? (
+                        routeLines.map((l) => (
+                          <Track key={l.id} color={l.color} hollow={l.inProgress} vertical ground="rgb(var(--enamel))" />
+                        ))
+                      ) : (
+                        <Track color={job.color} hollow={false} vertical />
+                      )}
+                    </div>
+                    <span
+                      className="absolute left-1/2 -translate-x-1/2 top-1 z-10 size-6 rounded-full bg-enamel"
+                      style={{ boxShadow: "inset 0 0 0 4px rgb(var(--on-enamel))" }}
                     />
-                  </svg>
-                  Download Resume
-                </span>
-              </a>
-            </div>
-          </div>
+                  </div>
+                  <p className="pt-1 text-lg font-black tabular-nums tracking-[-0.01em]">{job.period}</p>
+                  <div
+                    className={`col-start-2 md:col-start-3 pt-1 ${
+                      last ? "pb-2" : "pb-10 mb-10 border-b border-on-enamel/15"
+                    }`}
+                  >
+                    <p className="text-2xl font-extrabold tracking-[-0.02em]">{job.company}</p>
+                    <p className="mt-1 text-lg font-semibold">{job.role}</p>
+                    <p className="mt-0.5 text-on-enamel/70 font-medium">
+                      <Dotted text={job.place} />
+                    </p>
+                    {job.outcome && <p className="mt-4 max-w-[60ch] text-lg leading-relaxed text-on-enamel/90">{job.outcome}</p>}
+                    {routeLines.length > 0 && (
+                      <p className="mt-3 flex flex-wrap gap-x-5 font-bold">
+                        {routeLines.map((l) => (
+                          <a
+                            key={l.id}
+                            href={`#${l.id}`}
+                            className="inline-flex min-h-11 items-center underline decoration-[3px] underline-offset-[6px]"
+                            style={{ textDecorationColor: l.color }}
+                          >
+                            {l.name} line
+                          </a>
+                        ))}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </Section>
 
-          {/* IMAGE */}
-          <div className="flex-1 flex justify-center sm:justify-end mt-8 sm:mt-0">
-            <div className="relative w-46 h-46 sm:w-64 sm:h-64 rounded-full border border-slate-700
-              bg-gradient-to-br from-sky-400/40 to-purple-500/40 overflow-hidden shadow-xl">
+        {/* ── Skills: the interchange index ── */}
+        <Section
+          id="skills"
+          tone="platform"
+          className="!mt-0"
+          title="Skills"
+          intro="Every skill is marked with the lines it was used on. Pick a project to filter."
+        >
+          <div className="mt-10">
+            <SkillIndex />
+          </div>
+        </Section>
+
+        {/* ── About ── */}
+        <Section id="about" title="About">
+          <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-14">
+            <figure className="lg:col-span-5 max-w-md lg:max-w-none">
               <img
-                src="/profile.jpg"
-                alt="Vinay Chouhan"
-                className="w-full h-full object-cover"
+                src="/images/vinay-runfinity.jpg"
+                srcSet="/images/vinay-runfinity-600.jpg 600w, /images/vinay-runfinity.jpg 900w"
+                sizes="(min-width: 1024px) 460px, 90vw"
+                width={900}
+                height={1200}
+                loading="lazy"
+                alt="Vinay Chouhan standing beside the Runfinity 2.0 marathon sign, wearing a medal"
+                className="w-full h-auto rounded-[4px]"
               />
+              <figcaption className="mt-3 text-sm font-semibold text-ink/70">
+                At the Runfinity 2.0 marathon, medal around my neck.
+              </figcaption>
+            </figure>
+
+            <div className="lg:col-span-7 space-y-5 text-lg leading-relaxed max-w-[60ch]">
+              <p className="text-2xl sm:text-3xl font-extrabold tracking-[-0.02em] leading-snug text-balance">
+                Six years in IT: two at a support desk, then four building production systems for Direction Software and
+                Mihaan.
+              </p>
+              <p className="text-ink/85 text-pretty">
+                My core is Spring Boot, Spring WebFlux, Spring Security with JWT, PostgreSQL and REST API design, across
+                microservice and modular architectures, multi-tenant systems and AI features built with Spring AI, Google
+                Gemini and RAG.
+              </p>
+              <p className="text-ink/85 text-pretty">
+                On the front end I build responsive apps with Angular, React.js and Vue.js. I work in Agile/Scrum teams and
+                back my code with JUnit 5 and Mockito tests.
+              </p>
+              <p className="text-ink/85 text-pretty">
+                Right now I&apos;m building LaundryOS and FlexPulse end to end, from the backend to the Android, iOS and web
+                apps.
+              </p>
+
+              <div className="pt-6 grid sm:grid-cols-2 gap-8 text-base">
+                <div>
+                  <h3 className="text-sm font-extrabold pb-2 border-b-[3px] border-ink">Certification</h3>
+                  <ul>
+                    {certifications.map((c) => (
+                      <li key={c.title} className="py-2.5 border-b border-ink/10">
+                        <p className="font-semibold leading-snug">{c.title}</p>
+                        <p className="text-ink/70 text-[0.95rem]">{c.place}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-sm font-extrabold pb-2 border-b-[3px] border-ink">Education</h3>
+                  <ul>
+                    {education.map((e) => (
+                      <li key={e.title} className="py-2.5 border-b border-ink/10">
+                        <p className="font-semibold leading-snug">{e.title}</p>
+                        <p className="text-ink/70 text-[0.95rem]">{e.place}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </Section>
 
-      {/* ========================================================= */}
-      {/* 2. SKILLS SECTION */}
-      {/* ========================================================= */}
-      <Section id="skills">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="section-title">Skills</h2>
+        {/* ── Contact: the terminus ── */}
+        <Section id="contact" title="Contact" intro="All lines end here. Email is the fastest way to reach me.">
+          <div className="mt-10 flex items-center" aria-hidden="true">
+            <div className="flex-1 space-y-[7px]">
+              {lines.map((l) => (
+                <Track key={l.id} color={l.color} hollow={l.inProgress} />
+              ))}
+            </div>
+            <span className="w-3 self-stretch -my-2 rounded-full bg-ink" />
+          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {skills.map((skill) => (
-              <motion.div
-                key={skill}
-                whileHover={{ scale: 1.06, y: -2 }}
-                className="card border border-slate-800/80 bg-slate-900/40 px-3 py-2 text-sm text-center"
+          <div className="mt-12 grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <a
+                href={`mailto:${contact.email}`}
+                className="group inline-flex items-center gap-3 py-1 text-[clamp(1.5rem,3.8vw,3.25rem)] font-black tracking-[-0.03em] [overflow-wrap:anywhere] underline [text-decoration-skip-ink:none] decoration-[4px] underline-offset-[10px] decoration-ink/20 hover:decoration-ink transition-colors"
               >
-                {skill}
-              </motion.div>
-            ))}
+                {contact.email}
+                <FiArrowUpRight
+                  aria-hidden="true"
+                  className="shrink-0 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+              </a>
+              <Actions className="mt-8" email={false} />
+            </div>
+
+            <ul className="lg:col-span-5 text-lg">
+              {[
+                { icon: FiPhone, label: "Phone", value: contact.phone, href: contact.phoneHref },
+                { icon: FiLinkedin, label: "LinkedIn", value: contact.linkedinLabel, href: contact.linkedin },
+                { icon: FiGithub, label: "GitHub", value: contact.githubLabel, href: contact.github },
+                { icon: FiCode, label: "HackerRank", value: contact.hackerrankLabel, href: contact.hackerrank },
+                { icon: FiMapPin, label: "Based in", value: profile.location },
+              ].map(({ icon: Icon, label, value, href }) => (
+                <li
+                  key={label}
+                  className="grid grid-cols-[1.75rem_1fr] sm:grid-cols-[1.75rem_6.5rem_1fr] items-center gap-x-3 min-h-14 py-1 border-b border-ink/15 first:border-t"
+                >
+                  <Icon aria-hidden="true" className="text-xl" />
+                  <span className="sr-only sm:not-sr-only text-ink/70 font-semibold">{label}</span>
+                  {href ? (
+                    <a
+                      href={href}
+                      {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      className="font-bold [overflow-wrap:anywhere] py-2.5 hover:underline underline-offset-4 decoration-2"
+                    >
+                      {value}
+                    </a>
+                  ) : (
+                    <span className="font-bold">{value}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
-        </motion.div>
-      </Section>
+        </Section>
 
-      {/* ========================================================= */}
-      {/* 3. PROJECTS SECTION */}
-      {/* ========================================================= */}
-      <Section id="projects">
-  <motion.div
-    variants={fadeUp}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.4 }}
-    transition={{ duration: 0.6 }}
-  >
-    <h2 className="section-title">Projects</h2>
-
-    {/* CORE SYSTEM */}
-    <motion.div
-      whileHover={{ y: -4, scale: 1.01 }}
-      className="card p-6 sm:p-7 rounded-xl border border-slate-800
-      bg-gradient-to-br from-slate-900/60 to-slate-900/30 shadow-lg shadow-black/30"
-    >
-      <h3 className="text-xl font-semibold text-sky-300">
-        Global Trade Management & Content Distribution Platform
-      </h3>
-
-      <p className="mt-3 text-slate-200/90">
-        A production-grade, multi-tenant backend system designed to ingest,
-        normalize, and distribute global trade datasets such as RPL, HS, and
-        ECCN to subscribed client systems.
-      </p>
-
-      <ul className="mt-4 space-y-2 list-disc list-inside text-slate-200/90">
-        <li>Reactive REST APIs built using Spring Boot and Spring WebFlux.</li>
-        <li>Multi-format ingestion pipelines supporting JSON, XML, CSV, and Excel.</li>
-        <li>Incremental update logic with duplicate detection and normalization.</li>
-        <li>Subscription-based content distribution for tenant-specific datasets.</li>
-        <li>Automated notification and document generation engines.</li>
-        <li>Optimized PostgreSQL queries for high-volume data processing.</li>
-      </ul>
-
-      <div className="mt-5 flex flex-wrap gap-3 text-sm">
-        {["Java", "Spring Boot", "WebFlux", "PostgreSQL"].map((tech) => (
-          <span
-            key={tech}
-            className="rounded-full bg-slate-800 px-3 py-1
-            text-slate-200/90 border border-slate-700"
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
-    </motion.div>
-
-    {/* SUPPORTING SYSTEMS */}
-    <div className="mt-8 card p-6 sm:p-7">
-      <h3 className="text-lg font-semibold text-sky-300">
-        Other Enterprise Systems
-      </h3>
-
-      <ul className="mt-4 space-y-3 list-disc list-inside text-slate-200/90">
-        <li>
-          <strong>Audit Management System</strong> — Implemented CSR audit workflows,
-          event calendar, and server-side filtering for 500+ users.
-        </li>
-
-        <li>
-          <strong>Human Resource Management System</strong> — Built attendance tracking,
-          HR configurations, and automated notifications.
-        </li>
-
-        <li>
-          <strong>License Agreement System</strong> — Developed licensing workflows and
-          migrated frontend from AngularJS to React.js.
-        </li>
-
-        <li>
-          <strong>Analytics & Billing Platform (Woldo Analytics)</strong> — Created
-          analytics dashboards, content management features, and integrated Stripe
-          payments.
-        </li>
-      </ul>
-
-      <p className="mt-4 text-sm text-slate-400">
-        All systems followed a modular backend design with REST APIs,
-        secure authentication, and optimized database access.
-      </p>
-    </div>
-  </motion.div>
-</Section>
-
-      {/* ========================================================= */}
-      {/* 5. ABOUT SECTION */}
-      {/* ========================================================= */}
-      <Section id="about">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6 }}
-          className="card p-6 sm:p-8"
-        >
-          <h2 className="section-title">About Me</h2>
-
-          <div className="space-y-4 text-slate-200/90 leading-relaxed">
-            <p>
-              I&apos;m a Java Full-Stack Developer with 4 years of experience
-              building secure and scalable enterprise applications.
-            </p>
-
-            <p>
-              My primary focus is backend development using Spring Boot,
-              Microservices, and Spring WebFlux, along with PostgreSQL and REST APIs.
-            </p>
-
-            <p>
-              I&apos;ve worked extensively on automation, data ingestion pipelines,
-              incremental update engines, and multi-tenant systems.
-            </p>
-
-            <p>
-              I enjoy solving complex problems, optimizing performance,
-              and continuously improving system design.
-            </p>
+        <footer className={`${container} mt-24`}>
+          <div className="py-8 border-t-[6px] border-ink flex flex-wrap items-center justify-between gap-4 text-sm font-semibold text-ink/70">
+            <p>Designed and built by Vinay Chouhan, {new Date().getFullYear()}</p>
+            <a href="#hero" className="inline-flex items-center gap-1.5 min-h-11 hover:text-ink">
+              Back to top <FiArrowUp aria-hidden="true" />
+            </a>
           </div>
-        </motion.div>
-      </Section>
-
-      {/* ========================================================= */}
-      {/* 6. CONTACT SECTION */}
-      {/* ========================================================= */}
-      <Section id="contact">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6 }}
-          className="card p-6 sm:p-7"
-        >
-          <h2 className="section-title">Contact</h2>
-
-          <div className="space-y-3">
-            <p>📞 Phone: <a href="tel:+918962277229" className="text-sky-300">+91 89622 77229</a></p>
-            <p>📧 Email: <a href="mailto:vinay77100@gmail.com" className="text-sky-300">vinay77100@gmail.com</a></p>
-            <p>💼 LinkedIn: <a href="https://linkedin.com/in/vinaychouhan275" target="_blank" className="text-sky-300">linkedin.com/in/vinaychouhan275</a></p>
-            <p>🐙 GitHub: <a href="https://github.com/vinay27590" target="_blank" className="text-sky-300">github.com/vinay27590</a></p>
-            <p className="text-slate-400">📍 Indore, MP, India</p>
-          </div>
-        </motion.div>
-
-        <p className="mt-8 mb-10 text-center text-xs text-slate-500">
-          Designed & Built by Vinay Chouhan · {new Date().getFullYear()}
-        </p>
-      </Section>
-    </main>
+        </footer>
+      </main>
+    </LineFocusProvider>
   );
 }

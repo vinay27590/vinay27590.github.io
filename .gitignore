@@ -2,3 +2,10 @@ node_modules
 .next
 
 .vercel
+
+# build cache
+tsconfig.tsbuildinfo
+
+# local design-tool workspace and raw resume sources
+.impeccable/
+resume/
